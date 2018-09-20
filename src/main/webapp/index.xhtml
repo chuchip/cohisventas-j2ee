@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pf="http://primefaces.org/ui"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <h:outputStylesheet library="css" name="default.css"/>
+        <title>Consulta Historico Ventas</title>
+    </h:head>
+    <h:body>       
+        <h:form id="form_fecha">
+            <div>
+                Fecha Inicio:
+                <h:inputText id ="fechaInicio" p:type="date" alt="Fecha inicio" value="#{coHistVentasManager.fechaInicio}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/> 
+                </h:inputText>
+            </div>
+            <div>                 
+                Fecha Final:
+                <h:inputText id ="fechaFinal" p:type="date" alt="Fecha Final" value="#{coHistVentasManager.fechaFinal}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/> 
+                </h:inputText>
+                <h:inputHidden id="consultar" value="1"/> 
+            </div>
+            <!--            <h:inputText/> -->
+            <h:commandButton id="submit" value="Submit" action="#{coHistVentasManager.setConsultar(true)}" >     
+                <f:ajax  event="blur" execute="@form" render="grid1"/>
+            </h:commandButton>           
+        </h:form>             
+        <h:panelGroup layout="block" id="grid1" >
+            <h:panelGroup  layout="block" rendered="#{coHistVentasManager.consultar}">
+                <h:outputText value="prueba de panel" rendered="#{coHistVentasManager.consultar}"/>
+                <br/>¿y esto se ve ?<br/>
+
+<!--   Primer mes: <h:outputText value="#{coHistVentasManager.primerMes}" />-->
+                <h:form > 
+                    <h:dataTable value="#{coHistVentasManager.kilosPorMes}" var="ventasMes"      styleClass = "ventasTable"
+                                 headerClass = "ventasTableHeader"
+                                 rowClasses = "ventasTableOddRow,ventasTableEvenRow" >
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value=" "></h:outputText>
+                            </f:facet>
+                            <h:inputText size="1" id="Mes#{ventasMes.mes}" value="#{ventasMes.mes}">
+                                <f:ajax execute = "Mes#{ventasMes.mes}" event="blur" render="cambio"/>
+                            </h:inputText>
+
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Año"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{ventasMes.ano}"></h:outputText>
+                        </h:column>
+                        <h:column >
+                            <f:facet name="header">
+                                <h:outputText value="Mes"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{ventasMes.mes}"></h:outputText>
+                        </h:column>
+                        <!--
+                         <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Inicio"></h:outputText>
+                            </f:facet>
+                             <h:outputText value="#{ventasMes.fechaInicio}">
+                                 <f:convertDateTime pattern="dd-MM-yy"/> 
+                             </h:outputText>
+                        </h:column>
+                         <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Final"></h:outputText>
+                            </f:facet>
+                             <h:outputText value="#{ventasMes.fechaFinal}">
+                                  <f:convertDateTime pattern="dd-MM-yy"/> 
+                             </h:outputText>
+                        </h:column> -->
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Kg.Act."></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{ventasMes.kilosVentaAct}">
+                                <f:convertNumber pattern="#,###,##0.00"/> 
+                            </h:outputText>                     
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Kg.Ant"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{ventasMes.kilosVentaAnt}">
+                                <f:convertNumber pattern="#,###,##0.00"/> 
+                            </h:outputText>                     
+                        </h:column>
+                        <h:column class="columnaVentasMes">
+                            <f:facet name="header">
+                                <h:outputText value="Kg.Dif"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{ventasMes.kilosDiferencia}">
+                                <f:convertNumber pattern="#,###,##0.00"/> 
+                            </h:outputText>                     
+                        </h:column>
+                    </h:dataTable>
+                </h:form>    
+            </h:panelGroup>     
+        </h:panelGroup>        
+    </h:body>
+</html>
+
